@@ -40,7 +40,7 @@ This script leverages PyTorch for building and training an LSTM (Long Short-Term
 2. **Execute the script:**
     Add stock symbol in code
    ```bash
-   python StockPredictPytorch.py
+   python POC/StockPredictPytorch.py
    ```
    The script will output the predicted stock prices for the upcoming 7 days.
 
