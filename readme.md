@@ -1,5 +1,5 @@
 
-# Stock Prediction Scripts
+#  Market Insight AI
 
 ## Description
 
