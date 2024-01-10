@@ -171,3 +171,5 @@ predicted_prices_scaled = np.array(predicted_prices).reshape(-1, 1)
 predicted_prices_original = scaler.inverse_transform(predicted_prices_scaled).reshape(-1)
 
 print("Predicted Prices for the Next 7 Days:", predicted_prices_original)
+
+
