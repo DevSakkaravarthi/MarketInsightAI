@@ -3,11 +3,8 @@
 
 ## Description
 
-### StockPredictProphet.py
-This script utilizes the Prophet forecasting model by Meta (formerly Facebook) to predict future stock prices. It provides an interactive web interface using Streamlit, allowing users to input stock ticker symbols, select historical data ranges, and forecast stock prices for specified future periods.
+`Market Insight AI` is a comprehensive tool for stock market prediction, utilizing advanced machine learning techniques. It includes two main scripts:
 
-### StockPredictPytorch.py
-This script leverages PyTorch for building and training an LSTM (Long Short-Term Memory) neural network model. It fetches historical stock data from the Alpha Vantage API and is capable of predicting future stock prices.
 
 ## Installation
 
@@ -20,35 +17,58 @@ This script leverages PyTorch for building and training an LSTM (Long Short-Term
 2. **Install required Python packages:**
    Navigate to the directory containing the `requirements.txt` file and run:
    ```bash
-   pip install -r POC/requirements.txt
+   pip install -r requirements.txt
+   ```
+4. **Obtain an polygon API key:**
+   Visit [Polygon](https://polygon.io/) to get your API key. and add key to environment  
+   ```
+   export POLIGON_API_KEY='your_api_key_here'
+   ```
+   On Windows:
+
+
+   ```
+   set POLIGON_API_KEY=your_api_key_here
    ```
 
 ## How to Run
 
-### Running StockPredictProphet.py
+### Streamlit Web Interface (app_streamlit.py)
+
 1. **Start the Streamlit web interface:**
    ```bash
-   streamlit run POC/StockPredictProphet.py
+   streamlit run app_streamlit.py
    ```
 2. **Use the web interface:**
    Open your web browser to interact with the Streamlit application.
 
-### Running StockPredictPytorch.py
-1. **Obtain an Alpha Vantage API key:**
-   Visit [Alpha Vantage](https://www.alphavantage.co/) to get your API key. and add key in script 
+### Flask API Server (app_api.py)
 
-2. **Execute the script:**
-    Add stock symbol in code
+
+
+1. **Execute the script:**
+    Start the Flask server
    ```bash
-   python POC/StockPredictPytorch.py
+   python app_api.py
    ```
-   The script will output the predicted stock prices for the upcoming 7 days.
+2.  Use the endpoint /predict with a POST request to get stock    price predictions. The request should include JSON data with the stock symbol and number of days for prediction.
 
+      Example POST request data:
+
+
+      ```json
+      {
+      "symbol": "AAPL",
+      "days": 7
+      }
+      ```
+  
 ## Requirements
 
 - Python 3.x
-- Streamlit (for `StockPredictProphet.py`)
-- PyTorch (for `StockPredictPytorch.py`)
+- Streamlit (for StockPredictProphet.py and app_streamlit.py)
+- Flask (for app_api.py)
+- PyTorch (for AI model)
 - Additional libraries: Pandas, NumPy, requests, yfinance, sklearn, prophet
 
 Refer to `requirements.txt` for a complete list of dependencies.
