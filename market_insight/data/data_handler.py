@@ -3,6 +3,33 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import torch
 from market_insight.logger import setup_console_logger
+from datetime import datetime, timedelta
+
+def construct_url(base_url, symbol):
+    """
+    Constructs a URL to fetch stock data for the last three years until the current date.
+
+    Args:
+    base_url (str): The base URL of the API endpoint.
+    symbol (str): The stock symbol for which data is required.
+
+    Returns:
+    str: A URL string with the appropriate date range for the last three years.
+    """
+
+    # Current date
+    end_date = datetime.now()
+
+    # Date three years ago from today
+    start_date = end_date - timedelta(days=1*365)
+
+    # Formatting dates in YYYY-MM-DD format
+    start_date_str = start_date.strftime('%Y-%m-%d')
+    end_date_str = end_date.strftime('%Y-%m-%d')
+
+    # Constructing the URL
+    url = f"{base_url}/{symbol}/range/1/day/{start_date_str}/{end_date_str}?limit=50000"
+    return url
 
 class AlphavantageDataHandler:
     def __init__(self, api_key):
@@ -48,7 +75,8 @@ class PolygonDataHandler:
             "apiKey": self.api_key,
             "limit": 120  # Adjust as needed
         }
-        url = f"{self.base_url}/{symbol}/range/1/minute/2020-01-01/2023-01-01?limit=50000"  # Adjust dates as needed
+        # url = f"{self.base_url}/{symbol}/range/1/day/2020-01-01/2023-01-01?limit=50000" 
+        url = construct_url(self.base_url, symbol) # Adjust dates as needed
         response = requests.get(url, params=params)
         data = response.json()
         print(data)
