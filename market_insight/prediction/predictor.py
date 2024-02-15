@@ -8,7 +8,8 @@ class Predictor:
 
     def predict_next_days(self, start_sequence, days=7):
         self.model.eval()
-        predicted_prices = []
+        predicted_highs = []
+        predicted_lows = []
 
         for _ in range(days):
             with torch.no_grad():
@@ -17,10 +18,13 @@ class Predictor:
                 else:
                     raise TypeError("start_sequence must be a list")
 
-                predicted_price = self.model(seq)
-                predicted_prices.append(predicted_price.item())
-                start_sequence.append(predicted_price.item())  # Update the sequence
+                predicted_prices = self.model(seq)
+                high, low = predicted_prices.view(-1).tolist()  # Extract high and low values
+                predicted_highs.append(high)
+                predicted_lows.append(low)
+                # Update the sequence with both high and low values
+                start_sequence.extend([high, low])  
 
-        return predicted_prices
+        return predicted_highs, predicted_lows
 
         

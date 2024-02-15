@@ -91,7 +91,7 @@ class PolygonDataHandler:
         df.set_index('t', inplace=True)
         df.rename(columns={'c': 'Close', 'o': 'Open', 'h': 'High', 'l': 'Low', 'v': 'Volume'}, inplace=True)
         self.logger.info('Data fetching completed successfully')
-
+        print(df)
         return df
 
     def preprocess_data(self, data):    

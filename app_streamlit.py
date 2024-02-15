@@ -68,24 +68,27 @@ def load_model(symbol):
         return None, None, None
 
 
-def predict_stock_price(model, scaler, last_sequence, day):
+def predict_stock_price(model, scaler, last_sequence, days):
     # Use the last sequence for the symbol
     start_sequence = last_sequence[-60:].tolist()
     predictor = Predictor(model)
-    predicted_prices = predictor.predict_next_days(start_sequence, day)
-    predicted_prices_scaled = np.array(predicted_prices).reshape(-1, 1)
-    predicted_prices_original = scaler.inverse_transform(
-        predicted_prices_scaled).reshape(-1)
+    predicted_highs, predicted_lows = predictor.predict_next_days(start_sequence, days)
+
+    # Rescale the predicted values to their original scale
+    predicted_highs_scaled = scaler.inverse_transform(np.array(predicted_highs).reshape(-1, 1)).reshape(-1)
+    predicted_lows_scaled = scaler.inverse_transform(np.array(predicted_lows).reshape(-1, 1)).reshape(-1)
+
     # Generate response
     response = []
     today = datetime.date.today()
-    for i in range(day):
+    for i in range(days):
         date = today + datetime.timedelta(days=i)
         response.append({
             "date": date.isoformat(),
-            "predicted_high": predicted_prices_original[i],
-            "predicted_low": '-'
+            "predicted_high": predicted_highs_scaled[i],
+            "predicted_low": predicted_lows_scaled[i]
         })
+
     return response
 # Streamlit app
 

@@ -46,10 +46,11 @@ def predict():
 
     # Make prediction
     predictor = Predictor(model)
-    predicted_prices = predictor.predict_next_days(start_sequence, days)
-    predicted_prices_scaled = np.array(predicted_prices).reshape(-1, 1)
-    predicted_prices_original = scaler.inverse_transform(predicted_prices_scaled).reshape(-1)
+    predicted_highs, predicted_lows = predictor.predict_next_days(start_sequence, days)
 
+    # Rescale the predicted values to their original scale
+    predicted_highs_scaled = scaler.inverse_transform(np.array(predicted_highs).reshape(-1, 1)).reshape(-1)
+    predicted_lows_scaled = scaler.inverse_transform(np.array(predicted_lows).reshape(-1, 1)).reshape(-1)
 
     # Generate response
     response = []
@@ -58,9 +59,9 @@ def predict():
         date = today + datetime.timedelta(days=i)
         response.append({
             "date": date.isoformat(),
-            "predicted_high": predicted_prices_original[i],
-            "predicted_low": '-'
-    })
+            "predicted_high": predicted_highs_scaled[i],
+            "predicted_low": predicted_lows_scaled[i]
+        })
 
     return jsonify(response)
 if __name__ == "__main__":
